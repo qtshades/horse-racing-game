@@ -1,14 +1,16 @@
-import { Module } from 'vuex'
+import type { Module } from 'vuex';
 
-export type RaceState = any;
+export type RaceState = {};
 
-const raceModule: Module<RaceState, any> = {
+export type RootState = {};
+
+const raceModule: Module<RaceState, RootState> = {
   namespaced: true,
   state(): RaceState {
-    return {}
+    return {};
   },
   mutations: {},
   actions: {},
-}
+};
 
-export default raceModule
+export default raceModule;

@@ -1,2 +1,2 @@
-export * from './model/horseGenerator'
-export * from './composables/useHorses'
+export * from './model/horseGenerator';
+export * from './composables/useHorses';
