@@ -1,4 +1,4 @@
-import type { Horse } from '../types'
+import type { Horse } from '../types';
 
 export function generateHorses(count = 20): Horse[] {
   const safeCount = clamp(count, 1, 20);
