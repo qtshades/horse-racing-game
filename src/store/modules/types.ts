@@ -7,4 +7,5 @@ export type RaceState = {
   currentRound: number | null
   results: RoundResult[]
   running: boolean
+  runToken: number
 };
