@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { generateHorses } from '@/entities/horse';
-import type { Horse } from '@/entities/horse';
+import type { Horse } from '../types';
 
 export function useHorses(initialCount = 20) {
   const horses: Ref<Horse[]> = ref(generateHorses(initialCount));

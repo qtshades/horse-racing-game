@@ -1,9 +1,4 @@
-export type Horse = {
-  id: string
-  name: string
-  color: string
-  condition: number
-};
+import type { Horse } from '../types'
 
 export function generateHorses(count = 20): Horse[] {
   const safeCount = clamp(count, 1, 20);
