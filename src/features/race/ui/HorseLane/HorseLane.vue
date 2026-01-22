@@ -54,20 +54,17 @@ const runnerStyle = computed(() => ({
 const isAnimatingRun = computed(() => props.running && finalProgress.value == null && progress.value < 1);
 
 watch(
-    () => [props.running, props.distance, props.horse.condition] as const,
-    ([running]) => {
-      resetUi();
-
-      if (running) {
+    () => props.running,
+    (running, prevRunning) => {
+      if (running && !prevRunning) {
+        resetUi();
         start(computeDuration(props.distance, props.horse.condition));
+        return;
       }
+
+      if (!running && prevRunning) resetUi();
     },
     { immediate: true }
-);
-
-watch(
-    () => props.cancelToken,
-    () => resetUi()
 );
 
 function resetUi() {
