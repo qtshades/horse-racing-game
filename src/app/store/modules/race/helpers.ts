@@ -1,5 +1,5 @@
 import type { Round, RoundResult, Standing } from '@/entities/race';
-import type { RaceState } from '@/store/modules/race/types';
+import type { RaceState } from '@/app/store/modules/race/types';
 import type { Horse } from '@/entities/horse';
 import computeDuration from '@/shared/model/computeDuration';
 

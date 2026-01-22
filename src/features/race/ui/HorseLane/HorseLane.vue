@@ -29,7 +29,7 @@ import { computed, ref, watch } from 'vue';
 import type { Horse } from '@/entities/horse';
 import computeDuration from '@/shared/model/computeDuration';
 import HorseIcon from '@/shared/assets/icons/horse-running.svg?component';
-import { useHorseProgress } from '@/features/race-track/HorseLane/useHorseProgress';
+import { useHorseProgress } from '@/features/race';
 
 const props = defineProps({
   horse: { type: Object as PropType<Horse>, required: true },
@@ -77,4 +77,4 @@ function resetUi() {
 }
 </script>
 
-<style scoped lang="scss" src="./HorseLane.scss"></style>
+<style scoped lang="scss" src="HorseLane.scss"></style>

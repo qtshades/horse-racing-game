@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { AppButton } from '@/shared/ui';
-import { useRaceStore } from '@/features/race/composables/useRaceStore';
+import { useRaceStore } from '@/features/race';
 
 const {
   canSchedule,

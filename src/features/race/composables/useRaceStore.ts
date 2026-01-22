@@ -3,7 +3,7 @@ import { useStore } from 'vuex';
 
 import type { Horse } from '@/entities/horse';
 import type { Round } from '@/entities/race';
-import { RaceState } from '@/store/modules/race/types';
+import { RaceState } from '@/app/store/modules/race/types';
 
 export function useRaceStore() {
   const store = useStore();

@@ -18,8 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import HorseLane from './HorseLane/HorseLane.vue';
-import { useRaceStore } from '@/features/race/composables/useRaceStore';
+import { HorseLane, useRaceStore } from '@/features/race';
 
 const { currentRound, horsesInCurrentRound, running, runToken } = useRaceStore();
 </script>

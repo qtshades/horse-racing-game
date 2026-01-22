@@ -1,5 +1,5 @@
 import type { Module } from 'vuex';
-import type { RootState } from '@/store/types';
+import type { RootState } from '@/app/store/types';
 import type { RaceState } from './types';
 
 import { type Horse, generateHorses } from '@/entities/horse';

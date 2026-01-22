@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { AppTable } from '@/shared/ui';
-import { useRaceStore } from '@/features/race/composables/useRaceStore';
+import { useRaceStore } from '@/features/race';
 import type { Round } from '@/entities/race';
 
 type ScheduleTableRow = {

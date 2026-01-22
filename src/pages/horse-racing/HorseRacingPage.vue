@@ -13,11 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import RaceControls from '../../features/race-control/RaceControls.vue';
-import ScheduleList from '../../features/schedule/ScheduleList.vue';
-import HorsesList from '../../features/horses/HorsesList.vue';
-import RaceTrack from '../../features/race-track/RaceTrack.vue';
-import ResultsTable from '../../features/results/ResultsTable.vue';
+import { HorsesList } from '@/features/horses';
+import { RaceControls, ScheduleList, RaceTrack, ResultsTable } from '@/features/race';
 </script>
 
 <style scoped lang="scss">
