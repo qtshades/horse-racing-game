@@ -8,9 +8,19 @@ const round = { round: 1, distance: 1200, horses: horses.map(h => h.id) };
 describe('simulateRound', () => {
   it('returns standings for participants sorted by time', () => {
     const standings = simulateRound(round, horses);
+
     expect(standings.length).toBe(5);
+
     for (let i = 1; i < standings.length; i++) {
-      expect(standings[i].time).toBeGreaterThanOrEqual(standings[i - 1].time);
+      const currTime = standings[i].time;
+      const prevTime = standings[i - 1].time;
+
+      expect(currTime).toBeDefined();
+      expect(currTime).not.toBeNull();
+      expect(prevTime).toBeDefined();
+      expect(prevTime).not.toBeNull();
+
+      expect(currTime!).toBeGreaterThanOrEqual(prevTime!);
     }
   });
 

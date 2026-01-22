@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createStore } from 'vuex';
 import type { Store } from 'vuex';
 
-import type { RaceState } from '@/store/modules/race/types';
+import type { RaceState } from '@/app/store/modules/race/types';
 import type { Horse } from '@/entities/horse';
 import type { Round } from '@/entities/race';
 
@@ -32,7 +32,7 @@ const delay = async (ms: number) => {
 };
 
 const createRaceStore = async () => {
-  const { default: raceModule } = await import('@/store/modules/race');
+  const { default: raceModule } = await import('@/app/store/modules/race');
   return createStore({ modules: { race: raceModule } });
 };
 
