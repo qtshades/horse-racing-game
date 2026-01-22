@@ -2,13 +2,15 @@ import type { Module } from 'vuex';
 import type { RootState } from '@/store/types';
 import type { RaceState } from './types';
 
-import type { Horse } from '@/entities/horse/types';
-import type { Round, RoundResult } from '@/entities/race';
+import { type Horse, generateHorses } from '@/entities/horse';
 
-import { generateHorses } from '@/entities/horse/model/horseGenerator';
-import { generateSchedule as createSchedule } from '@/features/schedule/services/scheduler';
-import { simulateRound } from '@/features/race/services/simulator';
-import { RACE_DISTANCES } from '@/entities/race';
+import {
+  RACE_DISTANCES,
+  simulateRound,
+  generateSchedule as createSchedule,
+  type Round,
+  type RoundResult,
+} from '@/entities/race';
 import {
   makeRoundPlaceholders,
   makeAllPlaceholders,

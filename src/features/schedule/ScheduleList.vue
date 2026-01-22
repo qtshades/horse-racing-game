@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import AppTable from '@/shared/ui/AppTable/AppTable.vue';
+import { AppTable } from '@/shared/ui';
 import { useRaceStore } from '@/features/race/composables/useRaceStore';
 import type { Round } from '@/entities/race';
 

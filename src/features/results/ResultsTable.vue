@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import AppTable from '@/shared/ui/AppTable/AppTable.vue';
+import { AppTable } from '@/shared/ui';
 import { RACE_DISTANCES, type RoundResult, type Standing } from '@/entities/race';
 import type { Horse } from '@/entities/horse';
 import { useRaceStore } from '@/features/race/composables/useRaceStore';

@@ -26,7 +26,7 @@
 import type { PropType } from 'vue';
 import { computed, ref, watch } from 'vue';
 
-import type { Horse } from '@/entities/horse/types';
+import type { Horse } from '@/entities/horse';
 import computeDuration from '@/shared/model/computeDuration';
 import HorseIcon from '@/shared/assets/icons/horse-running.svg?component';
 import { useHorseProgress } from '@/features/race-track/HorseLane/useHorseProgress';

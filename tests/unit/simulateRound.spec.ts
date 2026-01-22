@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { simulateRound } from '../../src/features/race/services/simulator';
+import { simulateRound } from '@/entities/race';
 
 const horses = Array.from({ length: 5 }, (_, i) => ({ id: `h${i + 1}`, name: `Horse ${i + 1}`, color: 'hsl(0 0% 0%)', condition: 50 + i * 10 }));
 

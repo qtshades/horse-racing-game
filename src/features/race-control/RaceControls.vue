@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import AppButton from '@/shared/ui/AppButton.vue';
+import { AppButton } from '@/shared/ui';
 import { useRaceStore } from '@/features/race/composables/useRaceStore';
 
 const {

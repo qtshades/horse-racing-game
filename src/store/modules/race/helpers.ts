@@ -1,6 +1,6 @@
-import type {Round, RoundResult, Standing} from '@/entities/race';
-import type {RaceState} from '@/store/modules/race/types';
-import type {Horse} from '@/entities/horse';
+import type { Round, RoundResult, Standing } from '@/entities/race';
+import type { RaceState } from '@/store/modules/race/types';
+import type { Horse } from '@/entities/horse';
 import computeDuration from '@/shared/model/computeDuration';
 
 export function makeRoundPlaceholders(round: Round): RoundResult {

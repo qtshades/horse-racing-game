@@ -1,6 +1,5 @@
-import type { Horse } from '@/entities/horse/types';
-import { HORSES_PER_ROUND } from '@/entities/race';
-import type { Round } from '@/entities/race';
+import type { Horse } from '@/entities/horse';
+import { HORSES_PER_ROUND, type Round } from '@/entities/race';
 import shuffleInPlace from '@/shared/model/shuffleInPlace';
 
 export function generateSchedule(horses: Horse[], distances: number[]): Round[] {

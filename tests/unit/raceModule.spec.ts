@@ -3,12 +3,12 @@ import { createStore } from 'vuex';
 import type { Store } from 'vuex';
 
 import type { RaceState } from '@/store/modules/race/types';
-import type { Horse } from '@/entities/horse/types';
+import type { Horse } from '@/entities/horse';
 import type { Round } from '@/entities/race';
 
 vi.mock('@/shared/model/computeDuration', () => ({ default: vi.fn(() => 1) }));
 
-vi.mock('@/features/schedule/services/scheduler', () => ({
+vi.mock('@/entities/race/model/scheduler', () => ({
   generateSchedule: (horses: Horse[], distances: number[]): Round[] => [
     {
       round: 1,
@@ -18,7 +18,7 @@ vi.mock('@/features/schedule/services/scheduler', () => ({
   ],
 }));
 
-vi.mock('@/features/race/services/simulator', () => ({
+vi.mock('@/entities/race/model/simulator', () => ({
   simulateRound: (round: Round) =>
     round.horses.map((horseId: string, idx: number) => ({
       horseId,
