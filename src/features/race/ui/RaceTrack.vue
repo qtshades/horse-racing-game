@@ -1,7 +1,7 @@
 <template>
   <div class="race-track">
     <div v-if="currentRound">
-      <h3>Round {{ currentRound.round }} — {{ currentRound.distance }}m</h3>
+      <h3>{{ t('schedule.roundTitle', { round: currentRound.round, distance: currentRound.distance }) }}</h3>
 
       <div class="lanes">
         <HorseLane
@@ -19,6 +19,9 @@
 
 <script setup lang="ts">
 import { HorseLane, useRaceStore } from '@/features/race';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const { currentRound, horsesInCurrentRound, running, runToken } = useRaceStore();
 </script>

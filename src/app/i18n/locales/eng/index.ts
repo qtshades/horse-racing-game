@@ -12,6 +12,7 @@ export default {
   schedule: {
     title: 'Schedule',
     empty: 'No schedule',
+    roundTitle: 'Round {round} — {distance}m',
     columns: {
       round: 'Round',
       distance: 'Distance',
