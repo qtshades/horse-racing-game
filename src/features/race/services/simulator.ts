@@ -1,5 +1,6 @@
 import type { Round, Standing } from '@/entities/race';
 import type { Horse } from '@/entities/horse';
+import { clamp } from '@/shared/lib/clamp';
 
 export function simulateRound(round: Round, horses: Horse[]): Standing[] {
   const horsesById = indexHorsesById(horses);
@@ -35,8 +36,4 @@ function calculateFinishTimeMs(distanceMeters: number, conditionScore: number): 
   const clampedCondition = clamp(conditionScore, 1, 100);
   const relativePaceFactor = 100 / clampedCondition;
   return Math.round(distanceMeters * relativePaceFactor);
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, value));
 }

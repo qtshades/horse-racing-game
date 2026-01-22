@@ -1,0 +1,127 @@
+.horse-lane {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.horse-info {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 80px;
+}
+
+.horse-name {
+  font-weight: 600;
+}
+
+.track {
+  position: relative;
+  flex: 1;
+  height: 48px;
+  background: #f3f3f3;
+  border-radius: 20px;
+  overflow: hidden;
+  padding-right: 18px;
+}
+
+.finish-line {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
+  background: repeating-linear-gradient(180deg, #111 0 6px, #f3f3f3 6px 12px);
+  border-radius: 2px;
+  opacity: 0.9;
+}
+
+.runner {
+  position: absolute;
+  top: 50%;
+  display: inline-flex;
+  align-items: center;
+  transition: left 180ms cubic-bezier(0.2, 0.9, 0.2, 1);
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.18));
+}
+
+.runner.finished {
+  transition: left 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.runner.running {
+  animation: bob 260ms ease-in-out infinite alternate;
+}
+
+.runner.running .horse-icon {
+  width: 50px;
+  height: 50px;
+  transform-origin: 50% 70%;
+  animation: gallop 180ms ease-in-out infinite alternate;
+}
+
+.runner.finished .horse-icon {
+  animation: none;
+}
+
+.shadow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 22px;
+  height: 7px;
+  transform: translate(-50%, 14px);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+  filter: blur(1px);
+  opacity: 0.65;
+}
+
+.runner.running .shadow {
+  animation: shadow 260ms ease-in-out infinite alternate;
+}
+
+.runner.finished .shadow {
+  animation: none;
+}
+
+@keyframes bob {
+  from {
+    transform: translate(-50%, -50%) translateY(0px);
+  }
+  to {
+    transform: translate(-50%, -50%) translateY(-2px);
+  }
+}
+
+@keyframes gallop {
+  from {
+    transform: rotate(-2deg) translateY(0px);
+  }
+  to {
+    transform: rotate(2deg) translateY(-1px);
+  }
+}
+
+@keyframes shadow {
+  from {
+    transform: translate(-50%, 14px) scaleX(1);
+    opacity: 0.65;
+  }
+  to {
+    transform: translate(-50%, 14px) scaleX(0.85);
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runner,
+  .runner.finished {
+    transition: none;
+  }
+  .runner.running,
+  .horse-icon,
+  .shadow {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,70 @@
+@use '@/styles/_variables.scss' as *;
+@use 'sass:color' as color;
+
+.app-table-wrapper { display: block; }
+
+.app-table__title {
+  padding: 10px 12px;
+  font-weight: $app-button-font-weight;
+  text-transform: uppercase;
+  text-align: center;
+  background: $color-accent;
+  color: $white;
+  border-bottom: 1px solid color.adjust($color-accent, $lightness: -6%);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.app-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 14px;
+}
+
+.app-table thead th {
+  background: $color-primary;
+  color: $white;
+  font-weight: $app-button-font-weight;
+  padding: 8px 10px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.app-table tbody tr:hover td { background: rgba(25, 118, 210, 0.04); }
+
+.app-table tr { border: 1px solid $ghost-border; }
+
+.app-table td { padding: 8px 10px; background: $white; }
+
+.cell-color {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.empty {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.col-pos { width: 70px; text-align: center; font-weight: 600; }
+
+.col-name {
+  text-align: left;
+  padding-left: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.col-time {
+  width: 90px;
+  text-align: right;
+  padding-right: 12px;
+  color: $color-primary-dark;
+  font-weight: 600;
+}

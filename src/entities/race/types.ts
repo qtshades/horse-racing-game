@@ -6,8 +6,8 @@ export type Round = {
 
 export type Standing = {
   horseId: string
-  position: number
-  time: number
+  position?: number | null
+  time?: number | null
 };
 
 export type RoundResult = {

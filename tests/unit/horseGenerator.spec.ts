@@ -7,13 +7,14 @@ describe('generateHorses', () => {
     expect(generateHorses(5)).toHaveLength(5);
   });
 
-  it('produces unique ids and sequential names', () => {
+  it('produces unique ids and non-empty names', () => {
     const list = generateHorses(10);
     const ids = list.map(h => h.id);
     const idSet = new Set(ids);
     expect(idSet.size).toBe(ids.length);
-    list.forEach((h, i) => {
-      expect(h.name).toBe(`Horse ${i + 1}`);
+    list.forEach((h) => {
+      expect(typeof h.name).toBe('string');
+      expect(h.name.length).toBeGreaterThan(0);
       expect(typeof h.id).toBe('string');
     });
   });

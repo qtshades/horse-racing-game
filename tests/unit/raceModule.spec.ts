@@ -1,87 +1,185 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createStore } from 'vuex';
-import type { ActionContext } from 'vuex';
-import raceModule from '../../src/store/modules/race';
-import { RaceState } from '@/store/modules/types';
-import { RACE_DISTANCES } from '../../src/entities/race';
+import type { Store } from 'vuex';
 
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+import type { RaceState } from '@/store/modules/race/types';
+import type { Horse } from '@/entities/horse/types';
+import type { Round } from '@/entities/race';
 
-describe('race module', () => {
-  it('generateHorses commits horses', () => {
-    const store = createStore({ modules: { race: raceModule } });
-    return store.dispatch('race/generateHorses', 5).then(() => {
-      const horses = store.state.race.horses;
-      expect(horses).toHaveLength(5);
-    });
+vi.mock('@/shared/model/computeDuration', () => ({ default: vi.fn(() => 1) }));
+
+vi.mock('@/features/schedule/services/scheduler', () => ({
+  generateSchedule: (horses: Horse[], distances: number[]): Round[] => [
+    {
+      round: 1,
+      distance: distances[0] ?? 1200,
+      horses: horses.map((h) => h.id),
+    },
+  ],
+}));
+
+vi.mock('@/features/race/services/simulator', () => ({
+  simulateRound: (round: Round) =>
+    round.horses.map((horseId: string, idx: number) => ({
+      horseId,
+      time: 100 + idx,
+    })),
+}));
+
+const delay = async (ms: number) => {
+  vi.advanceTimersByTime(ms);
+  await Promise.resolve();
+};
+
+const createRaceStore = async () => {
+  const { default: raceModule } = await import('@/store/modules/race');
+  return createStore({ modules: { race: raceModule } });
+};
+
+const asRaceState = (store: Store<{ race: RaceState }>) => store.state.race as RaceState;
+
+describe('race store module', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
   });
 
-  it('generateSchedule creates schedule when horses exist', async () => {
-    const store = createStore({ modules: { race: raceModule } });
-    await store.dispatch('race/generateHorses', 12);
-    await store.dispatch('race/generateSchedule');
-    const schedule = store.state.race.schedule;
-    expect(schedule).toHaveLength(6);
-    expect(schedule[0].horses.length).toBeGreaterThan(0);
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.clearAllMocks();
   });
 
-  it('generateHorses + generateSchedule produce schedule with expected rounds', async () => {
-    const store = createStore({ modules: { race: raceModule } });
-    await store.dispatch('race/generateHorses', 12);
+  it('resetGame clears horses, schedule, results and currentRound', async () => {
+    const store = await createRaceStore();
+
+    await store.dispatch('race/generateHorses', 5);
     await store.dispatch('race/generateSchedule');
 
-    const schedule = store.state.race.schedule;
-    expect(Array.isArray(schedule)).toBe(true);
-    expect(schedule.length).toBe(RACE_DISTANCES.length);
-    expect(schedule[0].horses.length).toBeGreaterThan(0);
+    await store.dispatch('race/resetGame');
+
+    const raceState = asRaceState(store);
+    expect(raceState.horses).toHaveLength(0);
+    expect(raceState.schedule).toHaveLength(0);
+    expect(raceState.results).toHaveLength(0);
+    expect(raceState.currentRound).toBeNull();
+    expect(raceState.running).toBe(false);
   });
 
-  it('startRaces runs through all rounds and stores results (no return values)', async () => {
-    const store = createStore({ modules: { race: raceModule } });
-    await store.dispatch('race/generateHorses', 12);
-    await store.dispatch('race/generateSchedule');
+  it('generateHorses without args uses default count (20)', async () => {
+    const store = await createRaceStore();
 
-    const ret = await store.dispatch('race/startRaces');
+    await store.dispatch('race/generateHorses');
 
-    expect(ret).toBeUndefined();
-
-    const state = store.state.race;
-    expect(state.results.length).toBe(state.schedule.length);
-    expect(state.running).toBe(false);
-    expect(state.currentRound).toBeNull();
+    const raceState = asRaceState(store);
+    expect(raceState.horses).toHaveLength(20);
   });
 
-  it('stopRaces aborts running startRaces (midway)', async () => {
-    const slowRunRound = async (
-      { commit }: ActionContext<RaceState, unknown>,
-      { roundIndex }: { roundIndex: number }
-    ) => {
-      await delay(60);
-      commit('PUSH_RESULT', { round: roundIndex + 1, standings: [] });
-    };
+  it('generateSchedule does nothing when there are no horses', async () => {
+    const store = await createRaceStore();
 
-    const slowModule = {
-      ...raceModule,
-      actions: {
-        ...(raceModule.actions || {}),
-        runRound: slowRunRound,
-      },
-    };
-
-    const store = createStore({ modules: { race: slowModule } });
-    await store.dispatch('race/generateHorses', 12);
     await store.dispatch('race/generateSchedule');
 
-    const promise = store.dispatch('race/startRaces');
-    await delay(20);
-    await store.dispatch('race/stopRaces');
-    await promise;
+    const raceState = asRaceState(store);
+    expect(raceState.schedule).toHaveLength(0);
+    expect(raceState.results).toHaveLength(0);
+    expect(raceState.currentRound).toBeNull();
+    expect(raceState.running).toBe(false);
+  });
 
-    const state = store.state.race;
-    expect(state.results.length).toBeLessThan(state.schedule.length);
-    expect(state.running).toBe(false);
-    expect(state.currentRound).toBeNull();
+  it('generateSchedule sets currentRound to 0 and creates placeholders', async () => {
+    const store = await createRaceStore();
+
+    await store.dispatch('race/generateHorses', 6);
+    await store.dispatch('race/generateSchedule');
+
+    const raceState = asRaceState(store);
+    expect(raceState.currentRound).toBe(0);
+    expect(raceState.schedule).toHaveLength(1);
+    expect(raceState.results).toHaveLength(1);
+
+    const roundResult = raceState.results[0];
+    expect(roundResult.round).toBe(1);
+    expect(roundResult.standings).toHaveLength(6);
+    expect(roundResult.standings.every((s) => s.position == null && s.time == null)).toBe(true);
+  });
+
+  it('startRound sets running true, then writes standings and advances currentRound', async () => {
+    const store = await createRaceStore();
+
+    await store.dispatch('race/generateHorses', 6);
+    await store.dispatch('race/generateSchedule');
+
+    const startPromise = store.dispatch('race/startRound');
+
+    expect(store.getters['race/canStop']).toBe(true);
+    expect(store.getters['race/canStart']).toBe(false);
+
+    await delay(1);
+    await startPromise;
+
+    const raceState = asRaceState(store);
+    expect(raceState.running).toBe(false);
+    expect(raceState.currentRound).toBeNull();
+
+    const roundResult = raceState.results.find((r) => r.round === 1);
+    expect(roundResult).toBeTruthy();
+    expect(roundResult!.standings.every((s) => typeof s.position === 'number' && typeof s.time === 'number')).toBe(true);
+  });
+
+  it('stopRound cancels in-flight startRound and restores placeholders', async () => {
+    const store = await createRaceStore();
+
+    await store.dispatch('race/generateHorses', 6);
+    await store.dispatch('race/generateSchedule');
+
+    const startPromise = store.dispatch('race/startRound');
+
+    expect(store.getters['race/canStop']).toBe(true);
+
+    await store.dispatch('race/stopRound');
+
+    const raceStateAfterStop = asRaceState(store);
+    expect(raceStateAfterStop.running).toBe(false);
+    expect(raceStateAfterStop.currentRound).toBe(0);
+
+    const roundResultAfterStop = raceStateAfterStop.results.find((r) => r.round === 1)!;
+    expect(roundResultAfterStop.standings.every((s) => s.position == null && s.time == null)).toBe(true);
+
+    await delay(5);
+    await startPromise;
+
+    const raceStateAfterTimers = asRaceState(store);
+    const roundResultAfterTimers = raceStateAfterTimers.results.find((r) => r.round === 1)!;
+    expect(roundResultAfterTimers.standings.every((s) => s.position == null && s.time == null)).toBe(true);
+    expect(raceStateAfterTimers.running).toBe(false);
+    expect(raceStateAfterTimers.currentRound).toBe(0);
+  });
+
+  it('getters canSchedule/canStart/canStop reflect state transitions', async () => {
+    const store = await createRaceStore();
+
+    expect(store.getters['race/canSchedule']).toBe(false);
+    expect(store.getters['race/canStart']).toBe(false);
+    expect(store.getters['race/canStop']).toBe(false);
+
+    await store.dispatch('race/generateHorses', 8);
+
+    expect(store.getters['race/canSchedule']).toBe(true);
+    expect(store.getters['race/canStart']).toBe(false);
+    expect(store.getters['race/canStop']).toBe(false);
+
+    await store.dispatch('race/generateSchedule');
+
+    expect(store.getters['race/canSchedule']).toBe(true);
+    expect(store.getters['race/canStart']).toBe(true);
+    expect(store.getters['race/canStop']).toBe(false);
+
+    const startPromise = store.dispatch('race/startRound');
+    expect(store.getters['race/canStop']).toBe(true);
+    expect(store.getters['race/canStart']).toBe(false);
+
+    await delay(2);
+    await startPromise;
+
+    expect(store.getters['race/canStop']).toBe(false);
   });
 });
