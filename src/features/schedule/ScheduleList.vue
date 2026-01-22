@@ -1,20 +1,18 @@
 <template>
-  <div class="schedule-list">
+  <div class="schedule-list block">
     <AppTable
         title="Schedule"
         :columns="tableColumns"
         :rows="tableRows"
         table-class="schedule__table"
+        empty-text="No schedule"
     />
-
-    <EmptyState v-if="isEmpty" text="No schedule" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import AppTable from '@/shared/ui/AppTable/AppTable.vue';
-import EmptyState from '@/shared/ui/EmptyState.vue';
 import { useRaceStore } from '@/features/race/composables/useRaceStore';
 import type { Round } from '@/entities/race';
 
@@ -26,8 +24,6 @@ type ScheduleTableRow = {
 };
 
 const { schedule } = useRaceStore();
-
-const isEmpty = computed(() => schedule.value.length);
 
 const tableColumns = [
   { key: 'round', label: 'Round', class: 'col-pos' },
@@ -46,7 +42,4 @@ const tableRows = computed<ScheduleTableRow[]>(() =>
 </script>
 
 <style scoped lang="scss">
-.schedule-list {
-  padding: 8px;
-}
 </style>

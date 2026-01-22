@@ -26,7 +26,7 @@ const message = props.text.trim() || '—';
   justify-content: center;
   padding: 24px;
   background: $white;
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px;
   box-shadow: $panel-shadow;
 }
 

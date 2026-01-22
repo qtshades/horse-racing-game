@@ -6,6 +6,7 @@
           :columns="tableColumns"
           :rows="roundTable.rows"
           table-class="round__table"
+          empty-text="—"
       />
     </section>
   </div>

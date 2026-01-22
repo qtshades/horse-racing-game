@@ -1,20 +1,18 @@
 <template>
-  <div class="horses-list">
+  <div class="horses-list block">
     <AppTable
         title="Horses"
         :columns="tableColumns"
         :rows="tableRows"
         table-class="horses__table"
+        empty-text="No horses"
     />
-
-    <EmptyState v-if="isEmpty" text="No horses" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import AppTable from '@/shared/ui/AppTable/AppTable.vue';
-import EmptyState from '@/shared/ui/EmptyState.vue';
 import { useRaceStore } from '@/features/race/composables/useRaceStore';
 import type { AppTableColumn } from '@/shared/ui/AppTable/AppTable.vue';
 
@@ -26,8 +24,6 @@ type HorseTableRow = {
 };
 
 const { horses } = useRaceStore();
-
-const isEmpty = computed(() => horses.value.length === 0);
 
 const tableColumns: AppTableColumn[] = [
   { key: 'color', label: '', class: 'col-color', render: 'color' },
@@ -46,12 +42,6 @@ const tableRows = computed<HorseTableRow[]>(() =>
 </script>
 
 <style scoped lang="scss">
-@use '@/styles/_variables.scss' as *;
-
-.horses-list {
-  padding: 8px;
-}
-
 .col-color {
   width: 24px;
 }
