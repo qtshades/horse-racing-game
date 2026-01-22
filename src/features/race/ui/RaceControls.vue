@@ -3,6 +3,7 @@
     <AppButton
         v-for="btn in buttons"
         :key="btn.key"
+        :data-testid="`control-${btn.key}`"
         :disabled="btn.disabled?.() ?? false"
         @click="btn.onClick"
     >

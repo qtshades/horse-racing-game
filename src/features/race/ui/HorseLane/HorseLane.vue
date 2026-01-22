@@ -77,4 +77,4 @@ function resetUi() {
 }
 </script>
 
-<style scoped lang="scss" src="HorseLane.scss"></style>
+<style scoped lang="scss" src="./HorseLane.scss"></style>
