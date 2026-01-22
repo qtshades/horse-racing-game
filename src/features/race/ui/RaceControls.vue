@@ -16,6 +16,9 @@
 import { computed } from 'vue';
 import { AppButton } from '@/shared/ui';
 import { useRaceStore } from '@/features/race';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const {
   canSchedule,
@@ -38,30 +41,30 @@ type ControlButton = {
 const buttons = computed<ControlButton[]>(() => [
   {
     key: 'generate',
-    label: 'Generate',
+    label: t('common.generate'),
     onClick: () => generateHorses(20),
   },
   {
     key: 'schedule',
-    label: 'Schedule',
+    label: t('common.schedule'),
     onClick: generateSchedule,
     disabled: () => !canSchedule.value,
   },
   {
     key: 'start',
-    label: 'Start',
+    label: t('common.start'),
     onClick: startRound,
     disabled: () => !canStart.value,
   },
   {
     key: 'stop',
-    label: 'Stop',
+    label: t('common.stop'),
     onClick: stopRound,
     disabled: () => !canStop.value,
   },
   {
     key: 'reset',
-    label: 'Reset',
+    label: t('common.reset'),
     onClick: resetGame,
   },
 ]);

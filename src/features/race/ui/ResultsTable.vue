@@ -1,6 +1,10 @@
 <template>
   <div class="results">
-    <section v-for="roundTable in roundTables" :key="roundTable.roundNumber" class="round">
+    <section
+        v-for="roundTable in roundTables"
+        :key="roundTable.roundNumber"
+        class="round"
+    >
       <AppTable
           :title="roundTable.title"
           :columns="tableColumns"
@@ -18,6 +22,9 @@ import { AppTable } from '@/shared/ui';
 import { RACE_DISTANCES, type RoundResult, type Standing } from '@/entities/race';
 import type { Horse } from '@/entities/horse';
 import { useRaceStore } from '@/features/race';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 type ResultTableRow = {
   key: string
@@ -29,11 +36,11 @@ type ResultTableRow = {
 
 const { results, horsesById } = useRaceStore();
 
-const tableColumns = [
-  { key: 'position', label: 'Position', class: 'col-pos' },
-  { key: 'name', label: 'Name', class: 'col-name' },
-  { key: 'time', label: 'Time', class: 'col-time' },
-];
+const tableColumns = computed(() => [
+  { key: 'position', label: t('results.columns.position'), class: 'col-pos' },
+  { key: 'name', label: t('results.columns.name'), class: 'col-name' },
+  { key: 'time', label: t('results.columns.time'), class: 'col-time' },
+]);
 
 const roundTables = computed(() => {
   return results.value.map((roundResult: RoundResult) => {
@@ -42,7 +49,7 @@ const roundTables = computed(() => {
 
     return {
       roundNumber,
-      title: `${formatRoundOrdinal(roundNumber)} Lap - ${distanceMeters}m`,
+      title: `${formatRoundOrdinal(roundNumber)} ${t('common.lap')} - ${distanceMeters}m`,
       rows: mapStandingsToTableRows(roundNumber, roundResult.standings),
     };
   });

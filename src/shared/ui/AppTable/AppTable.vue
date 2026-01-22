@@ -35,20 +35,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import AppTableEmptyState from '@/shared/ui/AppTable/AppTableEmptyState.vue';
-
-type CellRender = 'text' | 'color';
-
-export type AppTableColumn<Key extends string = string> = {
-  key: Key
-  label: string
-  class?: string
-  render?: CellRender
-};
-
-export type AppTableRow = Record<string, unknown> & {
-  key: string | number
-};
+import AppTableEmptyState from './AppTableEmptyState.vue';
+import type { AppTableColumn, AppTableRow } from './types';
 
 const props = withDefaults(
     defineProps<{

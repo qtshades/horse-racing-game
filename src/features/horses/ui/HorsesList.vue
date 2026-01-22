@@ -1,20 +1,20 @@
 <template>
   <div class="horses-list block">
     <AppTable
-        title="Horses"
+        :title="t('horses.title')"
         :columns="tableColumns"
         :rows="tableRows"
         table-class="horses__table"
-        empty-text="No horses"
+        :empty-text="t('horses.empty')"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { AppTable } from '@/shared/ui';
+import { AppTable, type AppTableColumn } from '@/shared/ui';
+import { useI18n } from 'vue-i18n';
 import { useRaceStore } from '@/features/race';
-import type { AppTableColumn } from '../../../shared/ui/AppTable/AppTable.vue';
 
 type HorseTableRow = {
   key: string
@@ -23,13 +23,14 @@ type HorseTableRow = {
   condition: number
 };
 
+const { t } = useI18n();
 const { horses } = useRaceStore();
 
-const tableColumns: AppTableColumn[] = [
+const tableColumns = computed<AppTableColumn[]>(() => [
   { key: 'color', label: '', class: 'col-color', render: 'color' },
-  { key: 'name', label: 'Name', class: 'col-name' },
-  { key: 'condition', label: 'Cond', class: 'col-cond' },
-];
+  { key: 'name', label: t('horses.columns.name'), class: 'col-name' },
+  { key: 'condition', label: t('horses.columns.condition'), class: 'col-cond' },
+]);
 
 const tableRows = computed<HorseTableRow[]>(() =>
     horses.value.map((horse) => ({
